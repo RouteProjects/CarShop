@@ -1,4 +1,5 @@
 import 'package:carshop/Forgot_Password.dart';
+import 'package:carshop/HomePageScreen/Screens/HomePageScreen.dart';
 import 'package:carshop/Loginscreen.dart';
 import 'package:carshop/Register.dart';
 import 'package:flutter/material.dart';
@@ -17,8 +18,9 @@ class MyApp extends StatelessWidget {
         LoginScreen.routename:(context)=>LoginScreen(),
         ForgotPassword.routename:(context)=>ForgotPassword(),
         Register.routename:(_)=>Register(),
+        HomePageScreen.routename:(_)=>HomePageScreen(),
       },
-      initialRoute: LoginScreen.routename,
+      initialRoute: HomePageScreen.routename,
     );
   }
 }
