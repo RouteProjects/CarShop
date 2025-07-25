@@ -18,7 +18,7 @@ class MyApp extends StatelessWidget {
         ForgotPassword.routename:(context)=>ForgotPassword(),
         Register.routename:(_)=>Register(),
       },
-      initialRoute: LoginScreen.routename,
+      initialRoute: Register.routename,
     );
   }
 }
