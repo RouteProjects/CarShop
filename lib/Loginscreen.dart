@@ -1,4 +1,5 @@
 import 'package:carshop/Forgot_Password.dart';
+import 'package:carshop/HomePageScreen/Screens/HomePageScreen.dart';
 import 'package:carshop/Register.dart';
 import 'package:flutter/material.dart';
 
@@ -133,6 +134,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   width: double.infinity,
                   child: ElevatedButton(
                     onPressed: () {
+                      Navigator.pushReplacementNamed(context, HomePageScreen.routename);
                     },
                     style: ElevatedButton.styleFrom(
                       padding: EdgeInsets.zero,
