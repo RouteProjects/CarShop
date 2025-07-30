@@ -12,19 +12,16 @@ class _OnboardingscreenState extends State<Onboardingscreen> {
   // رقم الصفحة الحالي
 
   PageController controller = PageController();
-
   // عشان اتحكم ف التنقل بين صفحات
 
   //*********
   List<Map<String, String>> pages = [
-    // كل صفحة عبارة عن خريطة (Map): فيها عنوان، وصف، وصورة.
-    // بدل ما تكتب 3 صفحات يدوي، عملتهم كـ data وهتستخدمهم داخل PageView.builder.
 
-    // عشان كل م اعمل scroll المحتوي يتغير dot indicator
     {
       "title": "Locate the Destination",
       "subtitle":
           "Your destination is at your fingertips. Open app\n & enter where you want to go",
+      "image": "assets/images/car_bg.png",
       "image": "assets/images/car_bg.png",
     },
     {
@@ -65,17 +62,14 @@ class _OnboardingscreenState extends State<Onboardingscreen> {
             ),
           ),
           SizedBox(height: 20.0),
-          // leh PageView.builder msh PageView bs .. ?
-          // lw 3andy more pages lazm PageView.builder افضل ف التحكم..
-          // Page controller => page view هو اللي بيتحكم ف
-          // 1- نعرف منه مستخد واقف ف اني صفحة
+
           Expanded(
             child: PageView.builder(
-              // PageView.builder  => بناء صفحات ع حسب index
+
               controller: controller,
               itemCount: pages.length,
-              onPageChanged: // كل ما المستخدم يسحب scroll، نحدث قيمة currentpage
-                  // عشان نغير شكل الـ indicators والزر).
+              onPageChanged:
+
                   (index) {
                     setState(() {
                       currentPage = index;
@@ -131,21 +125,10 @@ class _OnboardingscreenState extends State<Onboardingscreen> {
                         child: ElevatedButton(
                           onPressed: () {
                             if (currentPage < pages.length - 1)
-                            // لو رقم الصفحة الحالية (currentPage) أقل من آخر رقم في الصفحات
-                            // (يعني لسه فيه صفحات جاية)
-                            // يبقى روح للصفحة اللي بعدها
-                            // List pages = [1, 2, 3];
-                            // pages.length = 3 ← يعني فيها 3 عناصر.
-                            // لكن:
-                            // أول صفحة رقمها = 0
-                            // الثانية = 1
-                            // الثالثة = 2
-                            // يعني آخر صفحة رقمها هو:pages.length - 1 = 2
-                            // finally => // لسه فيه صفحات
+
                             {
                               controller.nextPage(
-                                // روح للصفحة اللي بعدها
-                                // يحرك المستخدم للصفحة التالية
+
                                 duration: Duration(milliseconds: 300),
                                 curve: Curves.ease,
                               );
@@ -154,14 +137,13 @@ class _OnboardingscreenState extends State<Onboardingscreen> {
 
                           child: Row(
                             mainAxisSize: MainAxisSize.min,
-                            // ✅ يخلي العرض على قد المحتوى
+
                             children: [
                               Text(
                                 currentPage == pages.length - 1
                                     ? "Get Start"
                                     : "Next",
-                                // لو المستخدم واقف على آخر صفحة → اعرض "Get Start"
-                                // غير كده → اعرض "Next"
+
                                 style: TextStyle(
                                   fontSize: 16,
                                   fontWeight: FontWeight.w500,

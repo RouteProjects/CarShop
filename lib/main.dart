@@ -1,7 +1,10 @@
+import 'package:carshop/Add_Card.dart';
+import 'package:carshop/Car_Detailes.dart';
 import 'package:carshop/Forgot_Password.dart';
 import 'package:carshop/HomePageScreen/Screens/HomePageScreen.dart';
 import 'package:carshop/Loginscreen.dart';
 import 'package:carshop/Register.dart';
+import 'package:carshop/splash.dart';
 import 'package:flutter/material.dart';
 
 void main() {
@@ -15,12 +18,15 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       routes: {
+        splash.Routename:(_)=>splash(),
         LoginScreen.routename:(context)=>LoginScreen(),
         ForgotPassword.routename:(context)=>ForgotPassword(),
         Register.routename:(_)=>Register(),
         HomePageScreen.routename:(_)=>HomePageScreen(),
+        CarDetails.routeName:(_)=>CarDetails(),
+        AddCard.routeName:(_)=>AddCard(),
       },
-      initialRoute: LoginScreen.routename,
+      initialRoute: splash.Routename,
     );
   }
 }
