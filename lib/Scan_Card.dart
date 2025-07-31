@@ -40,9 +40,9 @@ class ScanCard extends StatelessWidget {
                 ),
               ),
               SizedBox(height: 30),
-              Image.asset("assets/images/card.png", width: 300),
+              Image.asset("Assets/images/card.png", width: 300),
               SizedBox(height: 35),
-              Image.asset("assets/images/barcodescan.png", width: 30),
+              Image.asset("Assets/images/barcodescan.png", width: 30),
               SizedBox(height: 220),
               Row(
                 children: [

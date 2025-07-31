@@ -1,5 +1,4 @@
 import 'package:carshop/Car_Detailes.dart';
-import 'package:carshop/Loginscreen.dart';
 import 'package:flutter/material.dart';
 
 class CarCardWidget extends StatelessWidget {
@@ -23,6 +22,7 @@ class CarCardWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: (){
+
         Navigator.pushNamed(context, CarDetails.routeName);
       },
       child: Container(

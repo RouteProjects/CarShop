@@ -1,11 +1,25 @@
 
 import 'package:carshop/Add_Card.dart';
+import 'package:carshop/HomePageScreen/Screens/HomePageScreen.dart';
 import 'package:flutter/material.dart';
+import 'Models/brandModel.dart';
+import 'package:carshop/HomePageScreen/Widgets/CarCard.dart';
+
+
+
 
 class CarDetails extends StatelessWidget {
   static const String routeName = "CarDetails";
+   CarDetails({super.key,});
 
-  const CarDetails({super.key});
+  List<Brand> fakeBrands = [
+    Brand(name: 'Toyota', imagePath: 'Assets/images/w.png'),
+    Brand(name: 'Honda', imagePath: 'Assets/images/hynda.png'),
+    Brand(name: 'Tesla', imagePath: 'Assets/images/nissan.png'),
+    Brand(name: 'Audi', imagePath: 'Assets/images/hynda.png'),
+    Brand(name: 'BMW', imagePath: 'Assets/images/w.png'),
+  ];
+
 
   @override
   Widget build(BuildContext context) {
@@ -15,12 +29,13 @@ class CarDetails extends StatelessWidget {
         leading: Padding(
           padding: const EdgeInsets.only(left: 10),
           child: IconButton(
-            onPressed: () {},
+            onPressed: () {
+              Navigator.pushNamed(context, HomePageScreen.routename);
+            },
             icon: Icon(Icons.arrow_back_ios, color: Colors.black, size: 25),
           ),
         ),
-        title: Text(
-          "Bugatti Vision",
+        title: Text("Toyota Corolla",
           style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
         ),
         centerTitle: true,
@@ -48,7 +63,7 @@ class CarDetails extends StatelessWidget {
                   width: 400,
                   height: 300,
                   child: Image.asset(
-                    "assets/images/masrati.png",
+                    "Assets/images/car2.webp",
                     fit: BoxFit.contain,
                   ),
                 ),
@@ -288,33 +303,35 @@ class CarDetails extends StatelessWidget {
 
                 Padding(
                   padding: const EdgeInsets.only(right: 30),
-                  child: Container(
-                    decoration: BoxDecoration(
-                      gradient: LinearGradient(
-                        colors: [Color(0xFF348AC7), Color(0xFF7474BF)],
-                      ),
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                    child: ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.transparent,
-                        padding: EdgeInsets.symmetric(
-                          horizontal: 35,
-                          vertical: 15,
+                  child: Ink(
+                    child: Container(
+                      decoration: BoxDecoration(
+                        gradient: LinearGradient(
+                          colors: [Color(0xFF7474BF), Color(0xFF348AC7)],
                         ),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(10),
-                        ),
+                        borderRadius: BorderRadius.circular(10),
                       ),
-                      onPressed: () {
-                        Navigator.of(context).pushNamed(AddCard.routeName);
-                      },
-                      child: Text(
-                        "Book Now",
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontWeight: FontWeight.bold,
-                          fontSize: 16,
+                      child: ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.transparent,
+                          padding: EdgeInsets.symmetric(
+                            horizontal: 35,
+                            vertical: 15,
+                          ),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                        ),
+                        onPressed: () {
+                          Navigator.of(context).pushNamed(AddCard.routeName);
+                        },
+                        child: Text(
+                          "Book Now",
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 16,
+                          ),
                         ),
                       ),
                     ),
