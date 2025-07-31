@@ -1,5 +1,5 @@
-import 'package:carshop/Car_Detailes.dart';
 import 'package:flutter/material.dart';
+import 'package:carshop/Car_Detailes.dart';
 
 class CarCardWidget extends StatelessWidget {
   const CarCardWidget({
@@ -18,11 +18,11 @@ class CarCardWidget extends StatelessWidget {
   final String carRating;
   final String carReviews;
   final String carPrice;
+
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: (){
-
+      onTap: () {
         Navigator.pushNamed(context, CarDetails.routeName);
       },
       child: Container(
@@ -63,23 +63,20 @@ class CarCardWidget extends StatelessWidget {
                   overflow: TextOverflow.ellipsis,
                 ),
                 const Spacer(),
-                Text(carType, style: TextStyle(fontSize: 16, color: Colors.grey)),
+                Text(
+                  carType,
+                  style: TextStyle(fontSize: 16, color: Colors.grey),
+                ),
               ],
             ),
-
             Row(
               crossAxisAlignment: CrossAxisAlignment.center,
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
-                GestureDetector(
-                  onTap: () {
-                    // Handle tap
-                  },
-                  child: Icon(
-                    Icons.star_border_rounded,
-                    color: Colors.orangeAccent,
-                    size: 30,
-                  ),
+                Icon(
+                  Icons.star_border_rounded,
+                  color: Colors.orangeAccent,
+                  size: 30,
                 ),
                 SizedBox(width: 4),
                 Text(

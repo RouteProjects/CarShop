@@ -1,6 +1,11 @@
 import 'package:carshop/Loginscreen.dart';
 import 'package:flutter/material.dart';
 
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:google_sign_in/google_sign_in.dart';
+
+import 'HomePageScreen/Screens/HomePageScreen.dart';
+
 class Register extends StatefulWidget {
   static const String routename = "Register";
   const Register({super.key});
@@ -8,9 +13,11 @@ class Register extends StatefulWidget {
   @override
   State<Register> createState() => _RegisterState();
 }
+
 void navigateBack(BuildContext context) {
   Navigator.pushReplacementNamed(context, LoginScreen.routename);
 }
+
 class _RegisterState extends State<Register> {
   final _formKey = GlobalKey<FormState>();
 
@@ -20,6 +27,7 @@ class _RegisterState extends State<Register> {
   final confirmPasswordController = TextEditingController();
 
   bool _obscurePassword = true;
+  bool _isLoading = false; // loading guard for buttons/spinners
 
   void _togglePasswordVisibility() {
     setState(() {
@@ -38,10 +46,53 @@ class _RegisterState extends State<Register> {
 
   void _submitForm() {
     if (_formKey.currentState!.validate()) {
-      // All fields are valid
-      print("Form is valid. Proceed to backend call.");
+      // Keep your current flow (you can wire Firebase email sign-up later)
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text("Form is valid. Proceed to backend call.")),
+      );
     }
   }
+
+  // --- Google Sign-In (using alias to avoid symbol conflicts) ---
+  Future<void> signInWithGoogle() async {
+    setState(() => _isLoading = true);
+    try {
+      final googleSignIn = GoogleSignIn();
+      final GoogleSignInAccount? googleUser = await googleSignIn.signIn();
+
+      if (googleUser == null) {
+        setState(() => _isLoading = false);
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text("Sign-in aborted by user.")),
+        );
+        return;
+      }
+
+      final GoogleSignInAuthentication googleAuth = await googleUser.authentication;
+
+      final credential = GoogleAuthProvider.credential(
+        accessToken: googleAuth.accessToken,
+        idToken: googleAuth.idToken,
+      );
+
+      await FirebaseAuth.instance.signInWithCredential(credential);
+
+      // Success message
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text("Sign-in successful!")),
+      );
+
+      // Navigate to homescreen
+      Navigator.pushReplacementNamed(context, HomePageScreen.routename);
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text("Sign-in failed: ${e.toString()}")),
+      );
+    } finally {
+      setState(() => _isLoading = false);
+    }
+  }
+  // --- end Google Sign-In ---
 
   @override
   Widget build(BuildContext context) {
@@ -60,21 +111,30 @@ class _RegisterState extends State<Register> {
                   child: Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: IconButton(
-                      onPressed: () {
-                        navigateBack(context);
-                      },
-                      icon: Icon(Icons.arrow_back_ios_new_sharp),
+                      onPressed: () => navigateBack(context),
+                      icon: const Icon(Icons.arrow_back_ios_new_sharp),
                     ),
                   ),
                 ),
                 // Header
-                Text("Create New Account", style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold, color: Color(0xff131A34))),
-                SizedBox(height: 5),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 60.0),
-                  child: Text("Set up your username and password. You can always change it later.", textAlign: TextAlign.center, style: TextStyle(fontSize: 16, color: Color(0xff808493))),
+                const Text(
+                  "Create New Account",
+                  style: TextStyle(
+                    fontSize: 24,
+                    fontWeight: FontWeight.bold,
+                    color: Color(0xff131A34),
+                  ),
                 ),
-                SizedBox(height: 30),
+                const SizedBox(height: 5),
+                const Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 60.0),
+                  child: Text(
+                    "Set up your username and password. You can always change it later.",
+                    textAlign: TextAlign.center,
+                    style: TextStyle(fontSize: 16, color: Color(0xff808493)),
+                  ),
+                ),
+                const SizedBox(height: 30),
 
                 // Email
                 Padding(
@@ -82,20 +142,28 @@ class _RegisterState extends State<Register> {
                   child: TextFormField(
                     controller: emailController,
                     validator: (value) {
-                      if (value == null || value.isEmpty) return "Email is required";
-                      if (!RegExp(r'^[^@]+@[^@]+\.[^@]+').hasMatch(value)) return "Enter a valid email";
+                      if (value == null || value.isEmpty) {
+                        return "Email is required";
+
+                      }
+                      if (!RegExp(r'^[^@]+@[^@]+\.[^@]+').hasMatch(value)) {
+                        return "Enter a valid email";
+                      }
                       return null;
                     },
                     decoration: InputDecoration(
-                      prefixIcon: Icon(Icons.email_outlined),
+                      prefixIcon: const Icon(Icons.email_outlined),
                       hintText: "Enter your New Email",
                       filled: true,
-                      fillColor: Color.fromRGBO(128, 132, 147, 0.05),
-                      border: OutlineInputBorder(borderRadius: BorderRadius.circular(10), borderSide: BorderSide.none),
+                      fillColor: const Color.fromRGBO(128, 132, 147, 0.05),
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(10),
+                        borderSide: BorderSide.none,
+                      ),
                     ),
                   ),
                 ),
-                SizedBox(height: 20),
+                const SizedBox(height: 20),
 
                 // Confirm Email
                 Padding(
@@ -103,20 +171,27 @@ class _RegisterState extends State<Register> {
                   child: TextFormField(
                     controller: confirmEmailController,
                     validator: (value) {
-                      if (value == null || value.isEmpty) return "Please confirm your email";
-                      if (value != emailController.text) return "Emails do not match";
+                      if (value == null || value.isEmpty) {
+                        return "Please confirm your email";
+                      }
+                      if (value != emailController.text) {
+                        return "Emails do not match";
+                      }
                       return null;
                     },
                     decoration: InputDecoration(
-                      prefixIcon: Icon(Icons.email_outlined),
+                      prefixIcon: const Icon(Icons.email_outlined),
                       hintText: "Confirm Email",
                       filled: true,
-                      fillColor: Color.fromRGBO(128, 132, 147, 0.05),
-                      border: OutlineInputBorder(borderRadius: BorderRadius.circular(10), borderSide: BorderSide.none),
+                      fillColor: const Color.fromRGBO(128, 132, 147, 0.05),
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(10),
+                        borderSide: BorderSide.none,
+                      ),
                     ),
                   ),
                 ),
-                SizedBox(height: 20),
+                const SizedBox(height: 20),
 
                 // Password
                 Padding(
@@ -125,24 +200,33 @@ class _RegisterState extends State<Register> {
                     controller: passwordController,
                     obscureText: _obscurePassword,
                     validator: (value) {
-                      if (value == null || value.isEmpty) return "Password is required";
-                      if (value.length < 6) return "Password must be at least 6 characters";
+                      if (value == null || value.isEmpty) {
+                        return "Password is required";
+                      }
+                      if (value.length < 6) {
+                        return "Password must be at least 6 characters";
+                      }
                       return null;
                     },
                     decoration: InputDecoration(
-                      prefixIcon: Icon(Icons.lock_outline_rounded),
+                      prefixIcon: const Icon(Icons.lock_outline_rounded),
                       suffixIcon: IconButton(
-                        icon: Icon(_obscurePassword ? Icons.visibility_off_outlined : Icons.visibility_outlined),
+                        icon: Icon(_obscurePassword
+                            ? Icons.visibility_off_outlined
+                            : Icons.visibility_outlined),
                         onPressed: _togglePasswordVisibility,
                       ),
                       hintText: "Enter New Password",
                       filled: true,
-                      fillColor: Color.fromRGBO(128, 132, 147, 0.05),
-                      border: OutlineInputBorder(borderRadius: BorderRadius.circular(10), borderSide: BorderSide.none),
+                      fillColor: const Color.fromRGBO(128, 132, 147, 0.05),
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(10),
+                        borderSide: BorderSide.none,
+                      ),
                     ),
                   ),
                 ),
-                SizedBox(height: 20),
+                const SizedBox(height: 20),
 
                 // Confirm Password
                 Padding(
@@ -151,27 +235,37 @@ class _RegisterState extends State<Register> {
                     controller: confirmPasswordController,
                     obscureText: _obscurePassword,
                     validator: (value) {
-                      if (value == null || value.isEmpty) return "Please confirm your password";
-                      if (value != passwordController.text) return "Passwords do not match";
+                      if (value == null || value.isEmpty) {
+                        return "Please confirm your password";
+                      }
+                      if (value != passwordController.text) {
+                        return "Passwords do not match";
+                      }
                       return null;
                     },
                     decoration: InputDecoration(
-                      prefixIcon: Icon(Icons.lock_outline_rounded),
+                      prefixIcon: const Icon(Icons.lock_outline_rounded),
                       suffixIcon: IconButton(
-                        icon: Icon(_obscurePassword ? Icons.visibility_off_outlined : Icons.visibility_outlined),
+                        icon: Icon(_obscurePassword
+                            ? Icons.visibility_off_outlined
+                            : Icons.visibility_outlined),
                         onPressed: _togglePasswordVisibility,
                       ),
                       hintText: "Confirm Password",
                       filled: true,
-                      fillColor: Color.fromRGBO(128, 132, 147, 0.05),
-                      border: OutlineInputBorder(borderRadius: BorderRadius.circular(10), borderSide: BorderSide.none),
+                      fillColor: const Color.fromRGBO(128, 132, 147, 0.05),
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(10),
+                        borderSide: BorderSide.none,
+                      ),
                     ),
                   ),
                 ),
 
                 // Sign up Button
                 Padding(
-                  padding: const EdgeInsets.only(left: 20, right: 20, top: 40),
+                  padding:
+                  const EdgeInsets.only(left: 20, right: 20, top: 40),
                   child: SizedBox(
                     height: 50,
                     width: double.infinity,
@@ -179,22 +273,27 @@ class _RegisterState extends State<Register> {
                       onPressed: _submitForm,
                       style: ElevatedButton.styleFrom(
                         padding: EdgeInsets.zero,
-                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(12),
+                        ),
                         backgroundColor: Colors.transparent,
                         shadowColor: Colors.transparent,
                       ),
                       child: Ink(
                         decoration: BoxDecoration(
-                          gradient: LinearGradient(
+                          gradient: const LinearGradient(
                             colors: [Color(0xFF7474BF), Color(0xFF348AC7)],
                             begin: Alignment.topLeft,
                             end: Alignment.bottomRight,
                           ),
                           borderRadius: BorderRadius.circular(10),
                         ),
-                        child: Container(
-                          alignment: Alignment.center,
-                          child: Text('Sign up', style: TextStyle(color: Colors.white, fontSize: 16)),
+                        child: const Center(
+                          child: Text(
+                            'Sign up',
+                            style: TextStyle(
+                                color: Colors.white, fontSize: 16),
+                          ),
                         ),
                       ),
                     ),
@@ -202,12 +301,13 @@ class _RegisterState extends State<Register> {
                 ),
 
                 // Already have an account?
-                SizedBox(height: 20),
+                const SizedBox(height: 20),
                 GestureDetector(
                   onTap: () {
-                    Navigator.pushReplacementNamed(context, LoginScreen.routename);
+                    Navigator.pushReplacementNamed(
+                        context, LoginScreen.routename);
                   },
-                  child: RichText(
+                  child:  RichText(
                     text: TextSpan(
                       text: "Already have an account",
                       style: TextStyle(color: Colors.black, fontSize: 14),
@@ -226,43 +326,71 @@ class _RegisterState extends State<Register> {
                   ),
                 ),
 
-                // Social Media login (as is)
-                SizedBox(height: 30),
+                // Social Media login (kept same design)
+                const SizedBox(height: 30),
                 Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                  padding:
+                  const EdgeInsets.symmetric(horizontal: 20.0),
                   child: Row(
-                    children: [
-                      Expanded(child: Divider(color: Color(0xffD8D8D8), thickness: 1, endIndent: 10)),
-                      Text("Or sign in with", style: TextStyle(color: Color(0xff131A34), fontSize: 16)),
-                      Expanded(child: Divider(color: Color(0xffD8D8D8), thickness: 1, indent: 10)),
+                    children: const [
+                      Expanded(
+                        child: Divider(
+                          color: Color(0xffD8D8D8),
+                          thickness: 1,
+                          endIndent: 10,
+                        ),
+                      ),
+                      Text(
+                        "Or sign in with",
+                        style: TextStyle(
+                            color: Color(0xff131A34), fontSize: 16),
+                      ),
+                      Expanded(
+                        child: Divider(
+                          color: Color(0xffD8D8D8),
+                          thickness: 1,
+                          indent: 10,
+                        ),
+                      ),
                     ],
                   ),
                 ),
-                SizedBox(height: 20),
+                const SizedBox(height: 20),
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 32),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
+                      // Google Button (same style)
                       ElevatedButton(
-                        onPressed: () {},
-                        child: Text("Google"),
+                        onPressed: _isLoading ? null : signInWithGoogle,
                         style: ElevatedButton.styleFrom(
-                          minimumSize: Size(157, 48),
-                          backgroundColor: Color.fromRGBO(216, 216, 216, 0.05),
+                          minimumSize: const Size(157, 48),
+                          backgroundColor:
+                          const Color.fromRGBO(216, 216, 216, 0.05),
                         ),
+                        child: _isLoading
+                            ? const SizedBox(
+                          width: 20,
+                          height: 20,
+                          child: CircularProgressIndicator(strokeWidth: 2),
+                        )
+                            : const Text("Google"),
                       ),
+                      // Facebook placeholder (unchanged)
                       ElevatedButton(
                         onPressed: () {},
-                        child: Text("Facebook"),
                         style: ElevatedButton.styleFrom(
-                          minimumSize: Size(157, 48),
-                          backgroundColor: Color.fromRGBO(216, 216, 216, 0.05),
+                          minimumSize: const Size(157, 48),
+                          backgroundColor:
+                          const Color.fromRGBO(216, 216, 216, 0.05),
                         ),
+                        child: const Text("Facebook"),
                       ),
                     ],
                   ),
                 ),
+                const SizedBox(height: 24),
               ],
             ),
           ),

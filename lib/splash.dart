@@ -3,7 +3,7 @@ import 'package:carshop/OnBoardingScreen.dart';
 import 'package:flutter/material.dart';
 
 class splash extends StatefulWidget {
-  static const String Routename = "splash";
+  static const String routename = "splash";
   const splash({super.key});
 
   @override
