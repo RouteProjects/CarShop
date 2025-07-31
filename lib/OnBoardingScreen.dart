@@ -1,6 +1,9 @@
+import 'package:carshop/Loginscreen.dart';
 import 'package:flutter/material.dart';
 
 class Onboardingscreen extends StatefulWidget {
+  static const String routName = "OnBoard";
+
   @override
   State<Onboardingscreen> createState() => _OnboardingscreenState();
 }
@@ -9,32 +12,27 @@ class _OnboardingscreenState extends State<Onboardingscreen> {
   //******
   int currentPage = 0;
 
-  // رقم الصفحة الحالي
-
   PageController controller = PageController();
-  // عشان اتحكم ف التنقل بين صفحات
 
   //*********
   List<Map<String, String>> pages = [
-
     {
       "title": "Locate the Destination",
       "subtitle":
           "Your destination is at your fingertips. Open app\n & enter where you want to go",
-      "image": "assets/images/car_bg.png",
-      "image": "assets/images/car_bg.png",
+      "image": "Assets/images/car_bg.png",
     },
     {
       "title": "Select your Root",
       "subtitle":
           "Get quick access to frequent locations , and\n save them as a favorite",
-      "image": "assets/images/blue.png",
+      "image": "Assets/images/blue.png",
     },
     {
       "title": "Get Your Car",
       "subtitle":
           "Fastest way to book car without the hassle of\n waiting & hanging for price",
-      "image": "assets/images/blue3.png",
+      "image": "Assets/images/blue3.png",
     },
   ];
 
@@ -49,7 +47,12 @@ class _OnboardingscreenState extends State<Onboardingscreen> {
             child: Align(
               alignment: Alignment.topRight,
               child: TextButton(
-                onPressed: () {},
+                onPressed: () {
+                  Navigator.pushReplacementNamed(
+                    context,
+                    LoginScreen.routename,
+                  );
+                },
                 child: Text(
                   "Skip",
                   style: TextStyle(
@@ -65,16 +68,13 @@ class _OnboardingscreenState extends State<Onboardingscreen> {
 
           Expanded(
             child: PageView.builder(
-
               controller: controller,
               itemCount: pages.length,
-              onPageChanged:
-
-                  (index) {
-                    setState(() {
-                      currentPage = index;
-                    });
-                  },
+              onPageChanged: (index) {
+                setState(() {
+                  currentPage = index;
+                });
+              },
               itemBuilder: (context, index) {
                 return Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -83,7 +83,11 @@ class _OnboardingscreenState extends State<Onboardingscreen> {
                       padding: const EdgeInsets.symmetric(horizontal: 20),
                       child: Text(
                         pages[index]["title"]!,
-                        style: Theme.of(context).textTheme.bodyLarge,
+                        style: TextStyle(
+                          fontSize: 28,
+                          color: Color(0xFF348AC7),
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
                     ),
                     SizedBox(height: 10.0),
@@ -91,26 +95,28 @@ class _OnboardingscreenState extends State<Onboardingscreen> {
                       padding: const EdgeInsets.symmetric(horizontal: 20),
                       child: Text(
                         pages[index]["subtitle"]!,
-                        style: Theme.of(context).textTheme.bodyMedium,
+                        style: TextStyle(
+                          color: Colors.grey,
+                          fontSize: 14,
+                          fontWeight: FontWeight.w400,
+                        ),
                       ),
                     ),
                     Padding(
                       padding: const EdgeInsets.all(20.0),
                       child: Row(
                         children: List.generate(
-                          // "أنا عايز أعمل قائمة (List) بعدد معيّن من العناصر، وكل عنصر هيتبني باستخدام دالة".
                           pages.length,
                           (index) => Container(
                             margin: EdgeInsets.symmetric(horizontal: 5),
                             width: currentPage == index ? 40 : 8,
-                            // لو دي هي الصفحة الحالية، النقطة تكون عريضة (40). غير كده تكون صغيرة (8).
+
                             height: currentPage == index ? 10 : 8,
-                            // لو الصفحة الحالية → الطول 10، وإلا 8.
+
                             decoration: BoxDecoration(
                               //shape: BoxShape.circle,
                               color: currentPage == index
                                   ? Color(0xff7474BF)
-                                  // لون النقطة النشطة مختلف عن الباقي.
                                   : Color(0xffD8D8D8),
                               borderRadius: BorderRadius.circular(20),
                             ),
@@ -122,45 +128,52 @@ class _OnboardingscreenState extends State<Onboardingscreen> {
                       padding: const EdgeInsets.all(20.0),
                       child: Align(
                         alignment: Alignment.bottomLeft,
-                        child: ElevatedButton(
-                          onPressed: () {
-                            if (currentPage < pages.length - 1)
-
-                            {
+                        child: InkWell(
+                          onTap: () {
+                            if (currentPage < pages.length - 1) {
                               controller.nextPage(
-
                                 duration: Duration(milliseconds: 300),
                                 curve: Curves.ease,
                               );
-                            } else {}
+                            } else {
+
+                              Navigator.pushReplacementNamed(context, LoginScreen.routename);
+                            }
                           },
-
-                          child: Row(
-                            mainAxisSize: MainAxisSize.min,
-
-                            children: [
-                              Text(
-                                currentPage == pages.length - 1
-                                    ? "Get Start"
-                                    : "Next",
-
-                                style: TextStyle(
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.w500,
-                                  color: Colors.white,
+                          child: Container(
+                            padding: EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+                            decoration: BoxDecoration(
+                              gradient: LinearGradient(
+                                colors: [Color(0xFF7474BF), Color(0xFF348AC7)],
+                                begin: Alignment.topLeft,
+                                end: Alignment.bottomRight,
+                              ),
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                            child: Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                Text(
+                                  currentPage == pages.length - 1 ? "Get Start" : "Next",
+                                  style: TextStyle(
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.w500,
+                                    color: Colors.white,
+                                  ),
                                 ),
-                              ),
-                              SizedBox(width: 6),
-                              Icon(
-                                Icons.arrow_forward,
-                                color: Colors.white,
-                                size: 24,
-                              ),
-                            ],
+                                SizedBox(width: 6),
+                                Icon(
+                                  Icons.arrow_forward,
+                                  color: Colors.white,
+                                  size: 24,
+                                ),
+                              ],
+                            ),
                           ),
                         ),
                       ),
                     ),
+
 
                     Expanded(child: Image.asset(pages[index]["image"]!)),
                   ],

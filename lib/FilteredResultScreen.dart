@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import '../Models/carModel.dart';
-import '../HomePageScreen/Widgets/CarCard.dart';
+import 'Models/carModel.dart';
+import 'HomePageScreen/Widgets/CarCard.dart';
 
 class FilteredResultScreen extends StatelessWidget {
   final List<Car> filteredCars;
