@@ -36,7 +36,7 @@ class UserInformation extends StatelessWidget {
           ],
         ),
         const Spacer(),
-        CircleAvatar(radius: 25, backgroundImage: AssetImage('assets/p.png')),
+        CircleAvatar(radius: 25, backgroundImage: AssetImage('Assets/images/p.png')),
       ],
     );
   }

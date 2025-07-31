@@ -3,7 +3,7 @@ import 'package:carshop/Add_Card.dart';
 import 'package:flutter/material.dart';
 
 class CarDetails extends StatelessWidget {
-  static const String routeName = "CarDetails";
+  static const String routename = "CarDetails";
 
   const CarDetails({super.key});
 
@@ -48,7 +48,7 @@ class CarDetails extends StatelessWidget {
                   width: 400,
                   height: 300,
                   child: Image.asset(
-                    "assets/images/masrati.png",
+                    "Assets/images/masrati.png",
                     fit: BoxFit.contain,
                   ),
                 ),
@@ -307,7 +307,7 @@ class CarDetails extends StatelessWidget {
                         ),
                       ),
                       onPressed: () {
-                        Navigator.of(context).pushNamed(AddCard.routeName);
+                        Navigator.of(context).pushNamed(AddCard.routename);
                       },
                       child: Text(
                         "Book Now",

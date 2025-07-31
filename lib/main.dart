@@ -5,9 +5,16 @@ import 'package:carshop/HomePageScreen/Screens/HomePageScreen.dart';
 import 'package:carshop/Loginscreen.dart';
 import 'package:carshop/Register.dart';
 import 'package:carshop/splash.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 
-void main() {
+import 'firebase_options.dart';
+
+void main() async{
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
   runApp(const MyApp());
 }
 class MyApp extends StatelessWidget {
@@ -18,15 +25,15 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       routes: {
-        splash.Routename:(_)=>splash(),
+        splash.routename:(_)=>splash(),
         LoginScreen.routename:(context)=>LoginScreen(),
         ForgotPassword.routename:(context)=>ForgotPassword(),
         Register.routename:(_)=>Register(),
         HomePageScreen.routename:(_)=>HomePageScreen(),
-        CarDetails.routeName:(_)=>CarDetails(),
-        AddCard.routeName:(_)=>AddCard(),
+        CarDetails.routename:(_)=>CarDetails(),
+        AddCard.routename:(_)=>AddCard(),
       },
-      initialRoute: splash.Routename,
+      initialRoute: splash.routename,
     );
   }
 }

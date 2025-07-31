@@ -2,7 +2,7 @@
 import 'package:flutter/material.dart';
 
 class AddCard extends StatelessWidget {
-  static const String routeName = "AddCart";
+  static const String routename = "AddCart";
 
   const AddCard({super.key});
 
@@ -17,7 +17,7 @@ class AddCard extends StatelessWidget {
               padding: const EdgeInsets.only(top: 15, right: 15),
               child: IconButton(
                 onPressed: () {},
-                icon: Image.asset("assets/images/scanner.png"),
+                icon: Image.asset("Assets/images/scanner.png"),
               ),
             ),
           ],
@@ -123,7 +123,7 @@ class AddCard extends StatelessWidget {
 
               child: Row(
                 children: [
-                  Image.asset("assets/images/check.png", width: 15),
+                  Image.asset("Assets/images/check.png", width: 15),
                   SizedBox(width: 10),
                   Text("Save Card Details"),
                 ],
@@ -154,7 +154,7 @@ class AddCard extends StatelessWidget {
                           ),
                         ),
                         onPressed: () {
-                          Navigator.of(context).pushNamed(routeName);
+                          Navigator.of(context).pushNamed(routename);
                         },
                         child: Text(
                           "Add Card",
