@@ -103,9 +103,7 @@ class _AddCardState extends State<AddCard> {
                       child: TextFormField(
                         controller: dayController,
                         keyboardType: TextInputType.datetime,
-                        inputFormatters: [
-                          FilteringTextInputFormatter.digitsOnly,
-                        ],
+                        inputFormatters: [FilteringTextInputFormatter.digitsOnly],
                         decoration: InputDecoration(
                           hintText: "Month",
                           filled: true,
@@ -125,17 +123,14 @@ class _AddCardState extends State<AddCard> {
                           }
                           return null;
                         },
-
                       ),
                     ),
-                    SizedBox(width: 20),
+                    const SizedBox(width: 20),
                     Expanded(
                       child: TextFormField(
                         controller: yearController,
                         keyboardType: TextInputType.datetime,
-                        inputFormatters: [
-                          FilteringTextInputFormatter.digitsOnly,
-                        ],
+                        inputFormatters: [FilteringTextInputFormatter.digitsOnly],
                         decoration: InputDecoration(
                           hintText: "Year",
                           filled: true,
@@ -156,7 +151,6 @@ class _AddCardState extends State<AddCard> {
                           }
                           return null;
                         },
-
                       ),
                     ),
                     const SizedBox(width: 20),
@@ -179,9 +173,8 @@ class _AddCardState extends State<AddCard> {
                           if (value == null || value.trim().isEmpty) {
                             return 'CVV is required';
                           }
-
+                          return null;
                         },
-
                       ),
                     ),
                   ],
@@ -213,9 +206,8 @@ class _AddCardState extends State<AddCard> {
                       ),
                     ),
                     onPressed: () {
-                      Navigator.pushNamed(context, ScanCard.routeName);
-
                       if (_formKey.currentState!.validate()) {
+                        Navigator.pushNamed(context, ScanCard.routeName);
                         ScaffoldMessenger.of(context).showSnackBar(
                           const SnackBar(
                             content: Text('Card added successfully'),
